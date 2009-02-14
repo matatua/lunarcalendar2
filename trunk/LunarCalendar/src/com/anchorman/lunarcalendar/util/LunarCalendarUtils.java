@@ -1,0 +1,521 @@
+package com.anchorman.lunarcalendar.util;
+
+import java.util.Date;
+import java.util.Vector;
+import java.util.Calendar;
+
+//import net.rim.device.api.i18n.SimpleDateFormat;
+public class LunarCalendarUtils {
+
+    public static final String DATE_FORMAT = "MMM yyyy";
+    public static final String FULL_DATE_FORMAT = "MMMMM, yyyy";
+    public static final String DAY_IN_WEEK_FORMAT = "EEEEE";
+
+    public static String formatDate(Date date) {
+        if (date == null) {
+            return null;
+        }
+
+        //SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+        //return formatter.format(date);
+        return date.toString();
+    }
+
+//	public static String formatDate(Date date, String format) {
+//		if (date == null)
+//			return null;
+//
+//		SimpleDateFormat formatter = new SimpleDateFormat(format);
+//
+//		return formatter.format(date);
+//	}
+    public static final double PI = Math.PI;
+
+    /**
+     *
+     * @param dd
+     * @param mm
+     * @param yy
+     * @return the number of days since 1 January 4713 BC (Julian calendar)
+     */
+    public static int jdFromDate(int dd, int mm, int yy) {
+        int a = (14 - mm) / 12;
+        int y = yy + 4800 - a;
+        int m = mm + 12 * a - 3;
+        int jd = dd + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
+        if (jd < 2299161) {
+            jd = dd + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083;
+        }
+        // jd = jd - 1721425;
+        return jd;
+    }
+
+    /**
+     * http://www.tondering.dk/claus/calendar.html Section: Is there a formula
+     * for calculating the Julian day number?
+     *
+     * @param jd -
+     *            the number of days since 1 January 4713 BC (Julian calendar)
+     * @return
+     */
+    public static int[] jdToDate(int jd) {
+        int a, b, c;
+        if (jd > 2299160) { // After 5/10/1582, Gregorian calendar
+            a = jd + 32044;
+            b = (4 * a + 3) / 146097;
+            c = a - (b * 146097) / 4;
+        } else {
+            b = 0;
+            c = jd + 32082;
+        }
+        int d = (4 * c + 3) / 1461;
+        int e = c - (1461 * d) / 4;
+        int m = (5 * e + 2) / 153;
+        int day = e - (153 * m + 2) / 5 + 1;
+        int month = m + 3 - 12 * (m / 10);
+        int year = b * 100 + d - 4800 + m / 10;
+        return new int[]{day, month, year};
+    }
+
+    /**
+     * Solar longitude in degrees Algorithm from: Astronomical Algorithms, by
+     * Jean Meeus, 1998
+     *
+     * @param jdn -
+     *            number of days since noon UTC on 1 January 4713 BC
+     * @return
+     */
+    public static double SunLongitude(double jdn) {
+        // return CC2K.sunLongitude(jdn);
+        return SunLongitudeAA98(jdn);
+    }
+
+    public static double SunLongitudeAA98(double jdn) {
+        double T = (jdn - 2451545.0) / 36525; // Time in Julian centuries from
+        // 2000-01-01 12:00:00 GMT
+        double T2 = T * T;
+        double dr = PI / 180; // degree to radian
+        double M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2; // mean anomaly, degree
+        double L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2; // mean
+        // longitude,
+        // degree
+        //double temp = dr * M;
+
+        double DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M);
+        DL = DL + (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M) + 0.000290 * Math.sin(dr * 3 * M);
+        double L = L0 + DL; // true longitude, degree
+        L = L - 360 * (INT(L / 360)); // Normalize to (0, 360)
+        return L;
+    }
+
+    public static double NewMoon(int k) {
+        // return CC2K.newMoonTime(k);
+        return NewMoonAA98(k);
+    }
+
+    /**
+     * Julian day number of the kth new moon after (or before) the New Moon of
+     * 1900-01-01 13:51 GMT. Accuracy: 2 minutes Algorithm from: Astronomical
+     * Algorithms, by Jean Meeus, 1998
+     *
+     * @param k
+     * @return the Julian date number (number of days since noon UTC on 1
+     *         January 4713 BC) of the New Moon
+     */
+    public static double NewMoonAA98(int k) {
+        double T = k / 1236.85; // Time in Julian centuries from 1900 January
+        // 0.5
+        double T2 = T * T;
+        double T3 = T2 * T;
+        double dr = PI / 180;
+        double Jd1 = 2415020.75933 + 29.53058868 * k + 0.0001178 * T2 - 0.000000155 * T3;
+        Jd1 = Jd1 + 0.00033 * Math.sin((166.56 + 132.87 * T - 0.009173 * T2) * dr); // Mean
+        // new
+        // moon
+        double M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3; // Sun's mean anomaly
+        double Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3; // Moon's mean anomaly
+        double F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3; // Moon's argument of latitude
+        double C1 = (0.1734 - 0.000393 * T) * Math.sin(M * dr) + 0.0021 * Math.sin(2 * dr * M);
+        C1 = C1 - 0.4068 * Math.sin(Mpr * dr) + 0.0161 * Math.sin(dr * 2 * Mpr);
+        C1 = C1 - 0.0004 * Math.sin(dr * 3 * Mpr);
+        C1 = C1 + 0.0104 * Math.sin(dr * 2 * F) - 0.0051 * Math.sin(dr * (M + Mpr));
+        C1 = C1 - 0.0074 * Math.sin(dr * (M - Mpr)) + 0.0004 * Math.sin(dr * (2 * F + M));
+        C1 = C1 - 0.0004 * Math.sin(dr * (2 * F - M)) - 0.0006 * Math.sin(dr * (2 * F + Mpr));
+        C1 = C1 + 0.0010 * Math.sin(dr * (2 * F - Mpr)) + 0.0005 * Math.sin(dr * (2 * Mpr + M));
+        double deltat;
+        if (T < -11) {
+            deltat = 0.001 + 0.000839 * T + 0.0002261 * T2 - 0.00000845 * T3 - 0.000000081 * T * T3;
+        } else {
+            deltat = -0.000278 + 0.000265 * T + 0.000262 * T2;
+        }
+
+        double JdNew = Jd1 + C1 - deltat;
+        return JdNew;
+    }
+
+    public static int INT(double d) {
+        return (int) Math.floor(d);
+    }
+
+    public static double getSunLongitude(int dayNumber, double timeZone) {
+        return SunLongitude(dayNumber - 0.5 - timeZone / 24);
+    }
+
+    public static int getNewMoonDay(int k, double timeZone) {
+        double jd = NewMoon(k);
+        return INT(jd + 0.5 + timeZone / 24);
+    }
+
+    public static int getLunarMonth11(int yy, double timeZone) {
+        double off = jdFromDate(31, 12, yy) - 2415021.076998695;
+        int k = INT(off / 29.530588853);
+        int nm = getNewMoonDay(k, timeZone);
+        int sunLong = INT(getSunLongitude(nm, timeZone) / 30);
+        if (sunLong >= 9) {
+            nm = getNewMoonDay(k - 1, timeZone);
+        }
+        return nm;
+    }
+
+    public static int getLeapMonthOffset(int a11, double timeZone) {
+        int k = INT(0.5 + (a11 - 2415021.076998695) / 29.530588853);
+        int last; // Month 11 contains point of sun longutide 3*PI/2 (December
+        // solstice)
+        int i = 1; // We start with the month following lunar month 11
+        int arc = INT(getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone) / 30);
+        do {
+            last = arc;
+            i++;
+            arc = INT(getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone) / 30);
+        } while (arc != last && i < 14);
+        return i - 1;
+    }
+
+    /**
+     *
+     * @param dd
+     * @param mm
+     * @param yy
+     * @param timeZone
+     * @return array of [lunarDay, lunarMonth, lunarYear, leapOrNot]
+     */
+    public static int[] convertSolar2Lunar(int dd, int mm, int yy,
+            double timeZone) {
+        int lunarDay, lunarMonth, lunarYear, lunarLeap;
+        int dayNumber = jdFromDate(dd, mm, yy);
+        int k = INT((dayNumber - 2415021.076998695) / 29.530588853);
+        int monthStart = getNewMoonDay(k + 1, timeZone);
+        if (monthStart > dayNumber) {
+            monthStart = getNewMoonDay(k, timeZone);
+        }
+        int a11 = getLunarMonth11(yy, timeZone);
+        int b11 = a11;
+        if (a11 >= monthStart) {
+            lunarYear = yy;
+            a11 = getLunarMonth11(yy - 1, timeZone);
+        } else {
+            lunarYear = yy + 1;
+            b11 = getLunarMonth11(yy + 1, timeZone);
+        }
+        lunarDay = dayNumber - monthStart + 1;
+        int diff = INT((monthStart - a11) / 29);
+        lunarLeap = 0;
+        lunarMonth = diff + 11;
+        if (b11 - a11 > 365) {
+            int leapMonthDiff = getLeapMonthOffset(a11, timeZone);
+            if (diff >= leapMonthDiff) {
+                lunarMonth = diff + 10;
+                if (diff == leapMonthDiff) {
+                    lunarLeap = 1;
+                }
+            }
+        }
+        if (lunarMonth > 12) {
+            lunarMonth = lunarMonth - 12;
+        }
+        if (lunarMonth >= 11 && diff < 4) {
+            lunarYear -= 1;
+        }
+        return new int[]{lunarDay, lunarMonth, lunarYear, lunarLeap};
+    }
+
+    public static int[] convertLunar2Solar(int lunarDay, int lunarMonth,
+            int lunarYear, int lunarLeap, double timeZone) {
+        int a11, b11;
+        if (lunarMonth < 11) {
+            a11 = getLunarMonth11(lunarYear - 1, timeZone);
+            b11 = getLunarMonth11(lunarYear, timeZone);
+        } else {
+            a11 = getLunarMonth11(lunarYear, timeZone);
+            b11 = getLunarMonth11(lunarYear + 1, timeZone);
+        }
+        int k = INT(0.5 + (a11 - 2415021.076998695) / 29.530588853);
+        int off = lunarMonth - 11;
+        if (off < 0) {
+            off += 12;
+        }
+        if (b11 - a11 > 365) {
+            int leapOff = getLeapMonthOffset(a11, timeZone);
+            int leapMonth = leapOff - 2;
+            if (leapMonth < 0) {
+                leapMonth += 12;
+            }
+            if (lunarLeap != 0 && lunarMonth != leapMonth) {
+                // System.out.println("Invalid input!");
+                return new int[]{0, 0, 0};
+            } else if (lunarLeap != 0 || off >= leapOff) {
+                off += 1;
+            }
+        }
+        int monthStart = getNewMoonDay(k + off, timeZone);
+        return jdToDate(monthStart + lunarDay - 1);
+    }
+    static YearlyEvent[] YEARLY_EVENTS = {
+        new YearlyEvent(1, 1, "Tết nguyên đán"),
+        new YearlyEvent(15, 1, "Rằm tháng Giêng"),
+        new YearlyEvent(10, 3, "Giỗ tỏ hùng vương (10/3 ÂL)"),
+        new YearlyEvent(15, 4, "Phật Đản (15/4 ÂL)"),
+        new YearlyEvent(5, 5, "Lễ Đoan Ngọ (5/5 ÂL)"),
+        new YearlyEvent(15, 7, "Vu Lan (15/7 ÂL)"),
+        new YearlyEvent(15, 8, "Têt Trung Thu (Rằm tháng 8)"),
+        new YearlyEvent(23, 12, "Ông táo chầu trời (23/12 ÂL)")
+    };
+
+    public static class YearlyEvent {
+
+        private int day,  month;
+        private String info;
+
+        public YearlyEvent(int dd, int mm, String info) {
+            this.day = dd;
+            this.month = mm;
+            this.info = info;
+        }
+
+        public int getDay() {
+            return day;
+        }
+
+        public int getMonth() {
+            return month;
+        }
+
+        public String getInfo() {
+            return info;
+        }
+    }
+
+    public static String getDayEvent(int dd, int mm) {
+        Vector events = findEvents(dd, mm);
+        String ret = "";
+        for (int i = 0; i < events.size(); i++) {
+            ret += ((YearlyEvent) events.elementAt(i)).getInfo() + " ";
+        }
+        return ret;
+    }
+
+    public static Vector findEvents(int dd, int mm) {
+        Vector ret = new Vector();
+        for (int i = 0; i < YEARLY_EVENTS.length; i++) {
+            YearlyEvent evt = YEARLY_EVENTS[i];
+            if (evt.day == dd && evt.month == mm) {
+                ret.addElement(evt);
+            }
+        }
+        return ret;
+    }
+    //public static final String[] TUAN = {"Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"};
+    public static final String[] THANG = {"Giêng", "Hai", "Ba", "Tư", "Năm",
+        "Sáu", "Bảy", "Tám", "Chín", "Mười", "Mười một", "Chạp"};
+    public static final String[] CAN = {"Gi\341p", "\u1EA4t", "B\355nh", "\u0110inh", "M\u1EADu", "K\u1EF7", "Canh", "T\342n", "Nh\342m", "Qu\375"};
+    public static final String[] CHI = {"T\375", "S\u1EEDu", "D\u1EA7n", "M\343o", "Th\354n", "T\u1EF5", "Ng\u1ECD", "M\371i", "Th\342n", "D\u1EADu", "Tu\u1EA5t", "H\u1EE3i"};
+    public static final String[] GIO_HD = {"110100101100", "001101001011",
+        "110011010010", "101100110100", "001011001101", "010010110011"};
+    public static final String[] TIETKHI = {"Xu\u00E2n ph\u00E2n", "Thanh minh", "C\u1ED1c v\u0169", "L\u1EADp h\u1EA1", "Ti\u1EC3u m\u00E3n", "Mang ch\u1EE7ng",
+	"H\u1EA1 ch\u00ED", "Ti\u1EC3u th\u1EED", "\u0110\u1EA1i th\u1EED", "L\u1EADp thu", "X\u1EED th\u1EED", "B\u1EA1ch l\u1ED9",
+	"Thu ph\u00E2n", "H\u00E0n l\u1ED9", "S\u01B0\u01A1ng gi\u00E1ng", "L\u1EADp \u0111\u00F4ng", "Ti\u1EC3u tuy\u1EBFt", "\u0110\u1EA1i tuy\u1EBFt",
+	"\u0110\u00F4ng ch\u00ED", "Ti\u1EC3u h\u00E0n", "\u0110\u1EA1i h\u00E0n", "L\u1EADp xu\u00E2n", "V\u0169 Th\u1EE7y", "Kinh tr\u1EADp"};
+
+    public static String getLunarMonthName(int lunarMonth) {
+        return "Tháng " + THANG[lunarMonth];
+    }
+
+    public static String getLunarYearName(int lunarYear) {
+        return "Năm " + CAN[(lunarYear + 6) % 10] + " " + CHI[(lunarYear + 8) % 12];
+    }
+
+    public static String getLunarMonthCanChiName(int lunarYear, int lunarMonth) {
+        return "Tháng " + CAN[(lunarYear * 12 + lunarMonth + 3) % 10] + " " + CHI[(lunarMonth + 1) % 12];
+    }
+
+    public static String getLunarDayCanChiName(int jd) {
+        return "Ngày " + CAN[(jd + 9) % 10] + " " + CHI[(jd + 1) % 12];
+    }
+
+    public static String getTietKhiName(int jd) {
+        return "Tiết " + TIETKHI[getSolarTerm(jd + 1, 7)];
+    }
+
+    public static String getZodiacTime(int jd) {
+        int chiOfDay = (jd + 1) % 12;
+        String gioHD = GIO_HD[chiOfDay % 6]; // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
+
+        //String result = "Giờ hoàng đạo: ";
+        String result = "";
+        int count = 0;
+        for (int i = 0; i < 12; i++) {
+            if (gioHD.charAt(i) == '1') {
+                result += CHI[i];
+                result += " (" + (i * 2 + 23) % 24 + "-" + (i * 2 + 1) % 24 + ")";
+                if (count++ < 5) {
+                    result += ", ";
+                }
+//				if (count == 3) result += "\n";
+            }
+        }
+        return result;
+    }
+
+    /*
+     * Can cua gio Chinh Ty (00:00) cua ngay voi JDN nay
+     */
+    public static String getHourCan(int jdn) {
+        return "Giờ " + CAN[(jdn - 1) * 2 % 10] + " " + CHI[0];
+    }
+
+    /*
+     * Compute the longitude of the sun at any time. Parameter: floating number
+     * jdn, the number of days since 1/1/4713 BC noon Algorithm from:
+     * "Astronomical Algorithms" by Jean Meeus, 1998
+     */
+    public static double SunLongitudeAstronomical(double jdn) {
+        double T, T2, dr, M, L0, DL, lambda, theta, omega;
+
+        // Time in Julian centuries from 2000-01-01 12:00:00 GMT
+        T = (jdn - 2451545.0) / 36525;
+        T2 = T * T;
+
+        // degree to radian
+        dr = PI / 180;
+        M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2; // mean
+        // anomaly,
+        // degree
+        L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2; // mean longitude,
+        // degree
+        DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M);
+        DL = DL + (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M) + 0.000290 * Math.sin(dr * 3 * M);
+        theta = L0 + DL; // true longitude, degree
+        // obtain apparent longitude by correcting for nutation and aberration
+        omega = 125.04 - 1934.136 * T;
+        lambda = theta - 0.00569 - 0.00478 * Math.sin(omega * dr);
+        // Convert to radians
+        lambda = lambda * dr;
+        lambda = lambda - PI * 2 * (INT(lambda / (PI * 2))); // Normalize to
+        // (0, 2*PI)
+        return lambda;
+    }
+
+    /*
+     * Compute the sun segment at start (00:00) of the day with the given
+     * integral Julian day number. The time zone if the time difference between
+     * local time and UTC: 7.0 for UTC+7:00. The function returns a number
+     * between 0 and 23. From the day after March equinox and the 1st major term
+     * after March equinox, 0 is returned. After that, return 1, 2, 3 ...
+     */
+    public static int getSolarTerm(int dayNumber, int timeZone) {
+        int ret = INT(SunLongitudeAstronomical(dayNumber - 0.5 - timeZone / 24.0) / PI * 12);
+        return ret;
+    }
+    public static int NUMBER_COLUMN = 7;
+    public static int NUMBER_ROW = 7;
+    public static String[] WEEK_DAYS = new String[]{"CN", "T2", "T3", "T4", "T5", "T6", "T7"};
+    public static String EMPTY = "";
+    public static int TIME_ZONE = 7;
+
+    public static String[][] getSolarMonth(int year, int month) {
+        String[][] data = new String[NUMBER_ROW][NUMBER_COLUMN];
+        // Set defaul value for data
+        for (int i = 0; i < NUMBER_ROW; i++) {
+            data[0][i] = WEEK_DAYS[i];
+        }
+        for (int i = 1; i < NUMBER_ROW; i++) {
+            for (int j = 0; j < NUMBER_COLUMN; j++) {
+                data[i][j] = EMPTY;
+            }
+        }
+
+        Calendar calendar = Calendar.getInstance();
+
+
+        int numberDayOfMonth = getDayOfMonth(year, month);
+
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.DATE, 1);
+
+        int beginWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+        int count = 0;
+        int num = 0;
+        for (int i = 1; i < NUMBER_ROW; i++) {
+            for (int j = 0; j < NUMBER_COLUMN; j++) {
+                count++;
+                if (count >= beginWeek && num < numberDayOfMonth)// + beginWeek - 1)
+                {
+                    num++;
+                    //data[i][j] = String.valueOf(count - beginWeek + 1);
+                    data[i][j] = String.valueOf(num);
+                }
+            }
+        }
+        return data;
+    }
+
+    public static String[][] getLunarMonth(int year, int month) {
+        String[][] data = getSolarMonth(year, month);
+        int[] dmy = new int[4];
+        int count = 0;
+        for(int i = 1; i < NUMBER_ROW; i++) {
+            for(int j = 0; j < NUMBER_COLUMN; j++){
+                if (!EMPTY.equals(data[i][j])){
+                    int day = Integer.parseInt(data[i][j]);                    
+                    dmy = convertSolar2Lunar(day, month, year, TIME_ZONE);
+                    if (dmy[0] != 1){
+                        data[i][j] = String.valueOf(dmy[0]);
+                    } else{
+                        // First day of a lunar month
+                        data[i][j] = dmy[0] + "/" + dmy[1];
+                    }
+                }                
+            }
+        }
+        return data;
+    }
+
+    public static int getDayOfMonth(int year, int month) {
+        int num = 0;
+        boolean leapYear = false;
+
+//        if (year % 4 == 0  || year % 400 == 0){
+//            leapYear = true;
+//            if (year % 100 == 0){
+//                leapYear = false;
+//            }
+//        }
+        if ((year % 100) % 4 == 0) {
+            leapYear = true;
+        }
+
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+            num = 31;
+        } else if (month == 4 || month == 6 || month == 8 || month == 11) {
+            num = 30;
+        } else if (leapYear) {
+            num = 29;
+        } else {
+            num = 28;
+        }
+
+        return num;
+    }    
+}
