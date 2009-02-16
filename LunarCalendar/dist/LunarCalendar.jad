@@ -1,0 +1,8 @@
+MIDlet-1: Lunar Calendar,/ui/icon.png,com.anchorman.lunarcalendar.ui.MainMIDlet
+MIDlet-Jar-Size: 93329
+MIDlet-Jar-URL: LunarCalendar.jar
+MIDlet-Name: LunarCalendar
+MIDlet-Vendor: AnchorMan
+MIDlet-Version: 0.0.1
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0
