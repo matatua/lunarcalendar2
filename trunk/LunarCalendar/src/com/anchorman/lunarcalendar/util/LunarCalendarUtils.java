@@ -271,14 +271,47 @@ public class LunarCalendarUtils {
         return jdToDate(monthStart + lunarDay - 1);
     }
     static YearlyEvent[] YEARLY_EVENTS = {
-        new YearlyEvent(1, 1, "Tết nguyên đán"),
-        new YearlyEvent(15, 1, "Rằm tháng Giêng"),
-        new YearlyEvent(10, 3, "Giỗ tỏ hùng vương (10/3 ÂL)"),
-        new YearlyEvent(15, 4, "Phật Đản (15/4 ÂL)"),
-        new YearlyEvent(5, 5, "Lễ Đoan Ngọ (5/5 ÂL)"),
-        new YearlyEvent(15, 7, "Vu Lan (15/7 ÂL)"),
+        new YearlyEvent(1, 1, "Tết Nguyên Đán"),
+        new YearlyEvent(15, 1, "Lễ Thượng Nguyên (Rằm tháng Giêng)"),
+        new YearlyEvent(23, 2, "Tiết Thanh Minh"),
+        new YearlyEvent(10, 3, "Giỗ Tỏ Hùng Vương"),
+        new YearlyEvent(15, 4, "Phật Đản"),
+        new YearlyEvent(5, 5, "Lễ Đoan Ngọ"),
+        new YearlyEvent(15, 7, "Lễ Trung Nguyên (Vu Lan)"),
         new YearlyEvent(15, 8, "Têt Trung Thu (Rằm tháng 8)"),
-        new YearlyEvent(23, 12, "Ông táo chầu trời (23/12 ÂL)")
+        new YearlyEvent(10, 10, "Lễ Thương Tân"),
+        new YearlyEvent(15, 10, "Lễ Hạ Nguyên"),
+        new YearlyEvent(23, 12, "Ông Táo Chầu Trời")
+    };
+
+    static YearlyEvent[] SPECIAL_YEARLY_EVENTS = {
+        new YearlyEvent(1, 1, "Tết Dương lịch"),
+        new YearlyEvent(3, 2, "Ngày thành lập Đảng Cộng Sản Việt Nam"),
+        new YearlyEvent(14, 2, "Ngày lễ Valentine"),
+        new YearlyEvent(27, 2, "Ngày Thầy thuốc Việt Nam"),
+        new YearlyEvent(8, 3, "Ngày Quốc tế Phụ nữ"),
+        new YearlyEvent(26, 3, "Ngày thành lập Đoàn TNCSHCM"),
+        new YearlyEvent(30, 4, "Ngày miền Nam hoàn toàn Giải Phóng"),
+        new YearlyEvent(1, 5, "Ngày Quốc tế Lao Động"),
+        new YearlyEvent(7, 5, "Ngày chiến thắng lịch sử Điện Biên Phủ"),
+        new YearlyEvent(9, 5, "Ngày của mẹ"),
+        new YearlyEvent(1, 6, "Ngày Quốc tế Thiếu nhi"),
+        new YearlyEvent(20, 6, "Ngày của cha"),
+        new YearlyEvent(21, 6, "Ngày Báo chí Việt Nam"),
+        new YearlyEvent(28, 6, "Ngày Gia đình Việt Nam"),
+        new YearlyEvent(27, 7, "Ngày Thương binh Liệt sỹ"),
+        new YearlyEvent(28, 7, "Ngày thành lập Công đoàn Việt Nam"),
+        new YearlyEvent(19, 8, "Ngày CMT8 thành công"),
+        new YearlyEvent(2, 9, "Ngày Quốc Khánh"),
+        new YearlyEvent(10, 9, "Ngày Thành lập Mặt Trận Tổ Quốc Việt Nam"),
+        new YearlyEvent(23, 9, "Ngày Nam Bộ kháng chiến"),
+        new YearlyEvent(1, 10, "Ngày Quốc tế người cao tuổi"),
+        new YearlyEvent(14, 10, "Ngày thành lập hội Nông dân Việt Nam"),
+        new YearlyEvent(20, 10, "Ngày Phụ nữ Việt Nam"),
+        new YearlyEvent(20, 11, "Ngày Nhà giáo Việt Nam"),
+        new YearlyEvent(22, 10, "Ngày Sinh nhật Bé yêu"),
+        new YearlyEvent(22, 12, "Ngày thành lập QĐND Việt Nam"),
+        new YearlyEvent(25, 12, "Lễ Giáng Sinh")
     };
 
     public static class YearlyEvent {
@@ -305,8 +338,8 @@ public class LunarCalendarUtils {
         }
     }
 
-    public static String getDayEvent(int dd, int mm) {
-        Vector events = findEvents(dd, mm);
+    public static String getDayYearlyEvent(int dd, int mm) {
+        Vector events = findYearlyEvents(dd, mm);
         String ret = "";
         for (int i = 0; i < events.size(); i++) {
             ret += ((YearlyEvent) events.elementAt(i)).getInfo() + " ";
@@ -314,7 +347,27 @@ public class LunarCalendarUtils {
         return ret;
     }
 
-    public static Vector findEvents(int dd, int mm) {
+    public static String getDaySpecialYearlyEvent(int dd, int mm) {
+        Vector events = findSpecialYearlyEvents(dd, mm);
+        String ret = "";
+        for (int i = 0; i < events.size(); i++) {
+            ret += ((YearlyEvent) events.elementAt(i)).getInfo() + " ";
+        }
+        return ret;
+    }
+
+    public static Vector findSpecialYearlyEvents(int dd, int mm) {
+        Vector ret = new Vector();
+        for (int i = 0; i < SPECIAL_YEARLY_EVENTS.length; i++) {
+            YearlyEvent evt = SPECIAL_YEARLY_EVENTS[i];
+            if (evt.day == dd && evt.month == mm) {
+                ret.addElement(evt);
+            }
+        }
+        return ret;
+    }
+
+    public static Vector findYearlyEvents(int dd, int mm) {
         Vector ret = new Vector();
         for (int i = 0; i < YEARLY_EVENTS.length; i++) {
             YearlyEvent evt = YEARLY_EVENTS[i];
@@ -324,6 +377,27 @@ public class LunarCalendarUtils {
         }
         return ret;
     }
+
+    public static boolean hasYearlyEvents(int dd, int mm) {
+        for (int i = 0; i < YEARLY_EVENTS.length; i++) {
+            YearlyEvent evt = YEARLY_EVENTS[i];
+            if (evt.day == dd && evt.month == mm) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasSpecialYearlyEvents(int dd, int mm) {
+        for (int i = 0; i < SPECIAL_YEARLY_EVENTS.length; i++) {
+            YearlyEvent evt = SPECIAL_YEARLY_EVENTS[i];
+            if (evt.day == dd && evt.month == mm) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //public static final String[] TUAN = {"Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"};
     public static final String[] THANG = {"Giêng", "Hai", "Ba", "Tư", "Năm",
         "Sáu", "Bảy", "Tám", "Chín", "Mười", "Mười một", "Chạp"};
