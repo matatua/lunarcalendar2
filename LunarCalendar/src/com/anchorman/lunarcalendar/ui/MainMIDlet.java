@@ -49,12 +49,16 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         mainForm = new Form(Resource.PROJECT_NAME);
     }
 
+    public void showSplashScreen() {
+        new SplashCanvas(display, mainForm);
+    }
+
     public void gotoMonth(int year, int month) {
         this.currentYear = year;
         this.currentMonth = month;
         //lunarCalControl.setCurrentDay(1);
 
-        lunarCalControl.gotoMonth(currentYear, currentMonth);        
+        lunarCalControl.gotoMonth(currentYear, currentMonth);
     }
 
     public void gotoDate(int year, int month, int day) {
@@ -65,8 +69,9 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         //lunarCalControl.setCurrentDay(day);
 
         int[] ymd = DateUtils.getCurrentYearMonthDate();
-        if (currentMonth == ymd[1] && currentYear == ymd[0])
+        if (currentMonth == ymd[1] && currentYear == ymd[0]) {
             day = ymd[2];
+        }
         gotoMonth(currentYear, currentMonth);
         lunarCalControl.setCurrentDay(day);
     }
@@ -113,8 +118,9 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         }
 
         int[] ymd = DateUtils.getCurrentYearMonthDate();
-        if (currentMonth == ymd[1] && currentYear == ymd[0])
+        if (currentMonth == ymd[1] && currentYear == ymd[0]) {
             day = ymd[2];
+        }
         gotoMonth(currentYear, currentMonth);
         lunarCalControl.setCurrentDay(day);
     }
@@ -129,8 +135,9 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         }
 
         int[] ymd = DateUtils.getCurrentYearMonthDate();
-        if (currentMonth == ymd[1] && currentYear == ymd[0])
+        if (currentMonth == ymd[1] && currentYear == ymd[0]) {
             day = ymd[2];
+        }
         gotoMonth(currentYear, currentMonth);
         lunarCalControl.setCurrentDay(day);
     }
@@ -145,6 +152,9 @@ public class MainMIDlet extends MIDlet implements CommandListener {
 
         header.setLayout(Item.LAYOUT_CENTER);
          */
+
+        //showSplashScreen();
+
         display = Display.getDisplay(this);
         lunarCalControl = new LunarCalendarControl(Resource.EMPTY, Display.getDisplay(this));
         lunarCalControl.gotoMonth(currentYear, currentMonth);
@@ -186,6 +196,7 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         }
 
         display.setCurrent(mainForm);
+        //showSplashScreen();
     }
 
     public void commandAction(Command command, Displayable displayable) {

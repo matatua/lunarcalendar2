@@ -7,7 +7,6 @@ package com.anchorman.lunarcalendar.util;
 
 import javax.microedition.lcdui.Graphics;
 import com.anchorman.lunarcalendar.drawing.Color;
-import com.anchorman.lunarcalendar.ui.Align;
 import javax.microedition.lcdui.Font;
 
 /**

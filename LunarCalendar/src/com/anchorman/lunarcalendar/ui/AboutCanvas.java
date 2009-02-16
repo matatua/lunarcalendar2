@@ -4,6 +4,7 @@
  */
 package com.anchorman.lunarcalendar.ui;
 
+import com.anchorman.lunarcalendar.platform.ScreenDetection;
 import com.anchorman.lunarcalendar.properties.Resource;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
@@ -36,7 +37,7 @@ public class AboutCanvas extends Canvas implements CommandListener {
         initialize();
     }
 */
-    public AboutCanvas(Form parent, Display display) {      
+    public AboutCanvas(Form parent, Display display) {
         this.parent = parent;
         this.display = display;
 
@@ -59,7 +60,10 @@ public class AboutCanvas extends Canvas implements CommandListener {
         }
         // Draw background
         if (image != null){
-            g.drawImage(image, 0, 0, Graphics.TOP | Graphics.LEFT);
+            int x, y;
+            x = (ScreenDetection.getFormWidth() - image.getWidth()) / 2;
+            y = (ScreenDetection.getFormHeight() - image.getHeight()) / 2;
+            g.drawImage(image, x, y, Graphics.TOP | Graphics.LEFT);
         }
     }
 }
