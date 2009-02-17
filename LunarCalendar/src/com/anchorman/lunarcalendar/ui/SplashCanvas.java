@@ -6,6 +6,8 @@ package com.anchorman.lunarcalendar.ui;
 
 import com.anchorman.lunarcalendar.platform.ScreenDetection;
 import com.anchorman.lunarcalendar.properties.Resource;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
@@ -19,41 +21,23 @@ import javax.microedition.lcdui.Image;
  *
  * @author NamNT2
  */
-public class AboutCanvas extends Canvas implements CommandListener {
+public class SplashCanvas extends Canvas {
 
-    private static final Command CMD_CLOSE = new Command(Resource.CLOSE_TEXT, Command.SCREEN, 1);
     private Display display;
-    private Displayable parent;
+    private Displayable next;
+    private Timer timer = new Timer();
     private Image image;
+    private static int INTERVAL_TIME = 2000;
 
-    private void initialize() {
-        addCommand(CMD_CLOSE);
-        setCommandListener(this);
-        
-        setFullScreenMode(false);
-    }
-
-    /*
-    public AboutCanvas(String title) {
-        super(title);
-        initialize();
-    }
-*/
-    public AboutCanvas(Displayable parent, Display display) {
-        this.parent = parent;
+    public SplashCanvas(Display display, Displayable next) {
+        this.next = next;
         this.display = display;
 
-        initialize();
-    }
-
-    public void commandAction(Command command, Displayable d) {
-        if (command == CMD_CLOSE) {
-            display.setCurrent(parent);
-        }
+        display.setCurrent(this);
     }
 
     protected void paint(Graphics g) {
-         // Load background image
+        // Load background image
         if (image == null) {
             try {
                 image = Image.createImage(Resource.ABOUT_IMAGE_PATH);
@@ -61,11 +45,35 @@ public class AboutCanvas extends Canvas implements CommandListener {
             }
         }
         // Draw background
-        if (image != null){
+        if (image != null) {
             int x, y;
             x = (ScreenDetection.getCanvasWidth() - image.getWidth()) / 2;
             y = (ScreenDetection.getCanvasHeight() - image.getHeight()) / 2;
             g.drawImage(image, x, y, Graphics.TOP | Graphics.LEFT);
+        }
+    }
+
+    protected void showNotify() {
+        timer.schedule(new CountDown(), INTERVAL_TIME);
+    }
+
+    protected void keyPressed(int keyCode) {
+        dismiss();
+    }
+
+    protected void pointerPressed(int x, int y) {
+        dismiss();
+    }
+
+    private void dismiss() {
+        timer.cancel();
+        display.setCurrent(next);
+    }
+
+    private class CountDown extends TimerTask {
+
+        public void run() {
+            dismiss();
         }
     }
 }

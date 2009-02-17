@@ -36,7 +36,7 @@ public class ScreenDetection {
     }
 
     public static int getCanvasWidth() {
-        return formWidth;
+        return canvasWidth;
     }
 
     public static int getCanvasHeight() {
@@ -44,7 +44,7 @@ public class ScreenDetection {
     }
 
     public static int getFormWidth() {
-        return canvasWidth;
+        return formWidth;
     }
 
     public static int getFormHeight() {

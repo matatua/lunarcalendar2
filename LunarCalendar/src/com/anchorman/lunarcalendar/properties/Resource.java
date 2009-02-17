@@ -26,7 +26,7 @@ public class Resource {
     public static final String PREV_MONTH_TEXT = "Tháng trước";
     public static final String ABOUT_TEXT = "Thông tin";
 
-    public static final String BACKGROUND_IMAGE_PATH = "/ui/bg.jpg";
+    public static final String BACKGROUND_IMAGE_PATH = "/ui/bg240x248_1.jpg";
     public static final String ABOUT_IMAGE_PATH = "/ui/about.jpg";
     public static final String EVENT_IMAGE_PATH = "/ui/event.png";
 
@@ -35,6 +35,7 @@ public class Resource {
     public static String SOLAR_CALENDAR_TEXT = "Dương lịch: ";
     public static String LUNAR_CALENDAR_TEXT = "Âm lịch: ";
     public static String NEW_LINE = "\r\n";
+
     //public static int FONT_FACE_SYSTEM = Font.FACE_SYSTEM;
     //public static int FONT_FACE_PROPORTIONAL = Font.FACE_PROPORTIONAL;
     //public static int FONT_FACE_MONOSPACE = Font.FACE_MONOSPACE;

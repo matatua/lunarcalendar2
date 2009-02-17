@@ -81,9 +81,9 @@ public class ChooseDateForm extends Form implements CommandListener {
             month = monthChooseGroup.getSelectedIndex() + 1;
             year = Integer.parseInt(yearTextField.getString());
             parent.gotoDate(year, month, 1);
-            display.setCurrent(parent.getMainForm());
+            display.setCurrent(parent.getCalendarControl());
         } else if (command == CMD_CANCEL) {
-            display.setCurrent(parent.getMainForm());
+            display.setCurrent(parent.getCalendarControl());
         }
     }
 }

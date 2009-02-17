@@ -15,15 +15,14 @@ import java.util.Date;
  */
 public class LunarCalendarControl extends CustomItem implements ItemCommandListener {
 
-    //private static final Command CMD_EDIT = new Command("Edit", Command.ITEM, 1);
     public static final int UPPER = 0;
     public static final int IN = 1;
     public static final int LOWER = 2;
     private Display display;
     private int rows = LunarCalendarUtils.NUMBER_ROW;
     private int cols = LunarCalendarUtils.NUMBER_COLUMN;
-    private int cellWidth = ScreenDetection.getCanvasWidth() / cols;
-    private int cellHeight = (ScreenDetection.getCanvasHeight() - PADDING_TOP) / rows;
+    private int cellWidth = ScreenDetection.getFormWidth() / cols;
+    private int cellHeight = (ScreenDetection.getFormHeight() - PADDING_TOP) / rows;
     private int location = UPPER;
     private int currentX = 0;
     private int currentY = 0;
@@ -44,6 +43,8 @@ public class LunarCalendarControl extends CustomItem implements ItemCommandListe
     private int currentDay;
     private static int PADDING_TOP = 25;
     private static int SUB_HEIGHT = 10;
+    private static int ARC_CORNER_WIDTH = 10;
+    private static int ARC_CORNER_HEIGHT = 10;
     // Traversal stuff     
     // indicating support of horizontal traversal internal to the CustomItem
     boolean horz;
@@ -102,12 +103,15 @@ public class LunarCalendarControl extends CustomItem implements ItemCommandListe
         int interactionMode = getInteractionModes();
         horz = ((interactionMode & CustomItem.TRAVERSE_HORIZONTAL) != 0);
         vert = ((interactionMode & CustomItem.TRAVERSE_VERTICAL) != 0);
-        this.setPreferredSize(ScreenDetection.getCanvasWidth(), ScreenDetection.getCanvasHeight());
+        //this.setPreferredSize(ScreenDetection.getFormWidth(), ScreenDetection.getFormHeight());
 
         // Load backgroundImage image
         if (backgroundImage == null) {
             try {
                 backgroundImage = Image.createImage(Resource.BACKGROUND_IMAGE_PATH);
+                int width = ScreenDetection.getFormWidth();
+                int height = ScreenDetection.getFormHeight();
+                backgroundImage = GraphicUtils.scaleImage(backgroundImage, width, height);
             } catch (Exception e) {
             }
         }
@@ -175,6 +179,8 @@ public class LunarCalendarControl extends CustomItem implements ItemCommandListe
         // Draw backgroundImage
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, Graphics.TOP | Graphics.LEFT);
+        //g.drawRegion(backgroundImage, 0, 0,
+        //        backgroundImage.getWidth(), backgroundImage.getHeight(), Sprite.TRANS_NONE, h, h, h);
         }
 
         // Draw header of calendar (Month mm Year yyyy)
@@ -195,7 +201,7 @@ public class LunarCalendarControl extends CustomItem implements ItemCommandListe
 
         int oldColor = g.getColor();
         GraphicUtils.setColor(g, cellFocusColor);
-        g.fillRect((currentX * cellWidth) + 1, (currentY * cellHeight) + 1 + PADDING_TOP, cellWidth - 1, cellHeight - 1);
+        g.fillRoundRect((currentX * cellWidth) + 1, (currentY * cellHeight) + 1 + PADDING_TOP, cellWidth - 1, cellHeight - 1, ARC_CORNER_WIDTH, ARC_CORNER_HEIGHT);
         g.setColor(oldColor);
 
         for (int i = 0; i < rows; i++) {
