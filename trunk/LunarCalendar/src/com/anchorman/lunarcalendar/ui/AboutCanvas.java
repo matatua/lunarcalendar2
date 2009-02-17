@@ -14,7 +14,6 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -30,8 +29,8 @@ public class AboutCanvas extends Canvas implements CommandListener {
     private Image backgroundImage;
     private Image iconImage;
     private Color stringColor = new Color(8,9,54);
-    private static int BORDER_ARC_CORNER_WIDTH = 7;
-    private static int BORDER_ARC_CORNER_HEIGHT = 7;
+    private static int BORDER_ARC_CORNER_WIDTH = 15;
+    private static int BORDER_ARC_CORNER_HEIGHT = 15;
     
     private void initialize() {
         addCommand(CMD_CLOSE);
