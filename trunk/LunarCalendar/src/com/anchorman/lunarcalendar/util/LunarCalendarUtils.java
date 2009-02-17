@@ -309,7 +309,7 @@ public class LunarCalendarUtils {
         new YearlyEvent(14, 10, "Ngày thành lập hội Nông dân Việt Nam"),
         new YearlyEvent(20, 10, "Ngày Phụ nữ Việt Nam"),
         new YearlyEvent(20, 11, "Ngày Nhà giáo Việt Nam"),
-        new YearlyEvent(22, 10, "Ngày Sinh nhật Bé yêu"),
+        //new YearlyEvent(22, 10, "Ngày Sinh nhật Bé yêu"),
         new YearlyEvent(22, 12, "Ngày thành lập QĐND Việt Nam"),
         new YearlyEvent(25, 12, "Lễ Giáng Sinh")
     };
