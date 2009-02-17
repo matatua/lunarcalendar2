@@ -39,8 +39,10 @@ public class CalendarCanvas extends Canvas {
     private int currentDay;
     private static int PADDING_TOP = 25;
     private static int SUB_HEIGHT = 10;
-    private static int ARC_CORNER_WIDTH = 10;
-    private static int ARC_CORNER_HEIGHT = 10;
+    private static int CELL_ARC_CORNER_WIDTH = 7;
+    private static int CELL_ARC_CORNER_HEIGHT = 7;
+//    private static int BORDER_ARC_CORNER_WIDTH = 30;
+//    private static int BORDER_ARC_CORNER_HEIGHT = 30;
 
     private String header;
     private Image backgroundImage;
@@ -83,8 +85,8 @@ public class CalendarCanvas extends Canvas {
         if (backgroundImage == null) {
             try {
                 backgroundImage = Image.createImage(Resource.BACKGROUND_IMAGE_PATH);
-                int width = ScreenDetection.getFormWidth();
-                int height = ScreenDetection.getFormHeight();
+                int width = ScreenDetection.getCanvasWidth();
+                int height = ScreenDetection.getCanvasHeight();
                 backgroundImage = GraphicUtils.scaleImage(backgroundImage,
                         width, height);
             } catch (Exception e) {
@@ -161,6 +163,14 @@ public class CalendarCanvas extends Canvas {
         // backgroundImage.getWidth(), backgroundImage.getHeight(),
         // Sprite.TRANS_NONE, h, h, h);
         }
+        
+//        // Draw border
+//        int x1 = 0;
+//        int y1 = 0;
+//        int x2 = ScreenDetection.getCanvasWidth() - x1 * 2;
+//        int y2 = ScreenDetection.getCanvasHeight() - y1 * 2;
+//        g.drawRoundRect(x1, y1, x2, y2, BORDER_ARC_CORNER_WIDTH, BORDER_ARC_CORNER_HEIGHT);
+//        g.drawRoundRect(x1+1, y1+1, x2-2, y2-2, BORDER_ARC_CORNER_WIDTH, BORDER_ARC_CORNER_HEIGHT);
 
         // Draw header of calendar (Month mm Year yyyy)
         Font headFont = Resource.FONT_MEDIUM_BOLD;
@@ -182,8 +192,8 @@ public class CalendarCanvas extends Canvas {
 
         int oldColor = g.getColor();
         GraphicUtils.setColor(g, cellFocusColor);
-        g.fillRoundRect((currentX * cellWidth) + 1, (currentY * cellHeight) + 1 + PADDING_TOP, cellWidth - 1, cellHeight - 1, ARC_CORNER_WIDTH,
-                ARC_CORNER_HEIGHT);
+        g.fillRoundRect((currentX * cellWidth) + 1, (currentY * cellHeight) + 1 + PADDING_TOP, cellWidth - 1, cellHeight - 1, CELL_ARC_CORNER_WIDTH,
+                CELL_ARC_CORNER_HEIGHT);
         g.setColor(oldColor);
 
         for (int i = 0; i < rows; i++) {
