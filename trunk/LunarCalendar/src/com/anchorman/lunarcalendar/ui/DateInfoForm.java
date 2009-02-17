@@ -24,7 +24,7 @@ public class DateInfoForm extends Form implements CommandListener{
 
     private static final Command CMD_CLOSE = new Command(Resource.CLOSE_TEXT, Command.OK, 1);
     private Display display;
-    private Form parent;
+    private Displayable parent;
     private StringItem solarStringItem;
     private StringItem lunarStringItem;
     private StringItem zodiacTimeStringItem;
@@ -61,7 +61,7 @@ public class DateInfoForm extends Form implements CommandListener{
         super(title);
     }
 
-    public DateInfoForm(String title, Form parent, Display display) {
+    public DateInfoForm(String title, Displayable parent, Display display) {
         super(title);
         this.parent = parent;
         this.display = display;

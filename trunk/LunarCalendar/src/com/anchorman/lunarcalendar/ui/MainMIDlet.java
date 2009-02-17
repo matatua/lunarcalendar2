@@ -22,17 +22,18 @@ public class MainMIDlet extends MIDlet implements CommandListener {
     private static final Command CMD_ABOUT = new Command(Resource.ABOUT_TEXT, Command.SCREEN, 6);
     private Display display;
     private boolean firstTime;
-    private Form mainForm;
+    //private Form mainForm;
     public int currentYear;
     public int currentMonth;
     //public int currrentDay;
     private ChooseDateForm chooseDateForm = null;
-    private LunarCalendarControl lunarCalControl;
+    //private LunarCalendarControl lunarCalControl;
+    private CalendarCanvas calendarControl;
     private StringItem header;
 
-    public Form getMainForm() {
-        return mainForm;
-    }
+//    public Form getMainForm() {
+//        return mainForm;
+//    }
 
     public Display getDisplay() {
         return display;
@@ -46,11 +47,12 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         currentYear = ymd[0];
         currentMonth = ymd[1];
 
-        mainForm = new Form(Resource.PROJECT_NAME);
+        //mainForm = new Form(Resource.PROJECT_NAME);
     }
 
     public void showSplashScreen() {
-        new SplashCanvas(display, mainForm);
+        //new SplashCanvas(display, mainForm);
+    	new SplashCanvas(display, calendarControl);
     }
 
     public void gotoMonth(int year, int month) {
@@ -58,14 +60,14 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         this.currentMonth = month;
         //lunarCalControl.setCurrentDay(1);
 
-        lunarCalControl.gotoMonth(currentYear, currentMonth);
+        calendarControl.gotoMonth(currentYear, currentMonth);
     }
 
     public void gotoDate(int year, int month, int day) {
         this.currentYear = year;
         this.currentMonth = month;
 
-        lunarCalControl.gotoMonth(currentYear, currentMonth);
+        calendarControl.gotoMonth(currentYear, currentMonth);
         //lunarCalControl.setCurrentDay(day);
 
         int[] ymd = DateUtils.getCurrentYearMonthDate();
@@ -73,11 +75,11 @@ public class MainMIDlet extends MIDlet implements CommandListener {
             day = ymd[2];
         }
         gotoMonth(currentYear, currentMonth);
-        lunarCalControl.setCurrentDay(day);
+        calendarControl.setCurrentDay(day);
     }
 
     private void showAboutForm() {
-        AboutCanvas aboutCanvas = new AboutCanvas(mainForm, display);
+        AboutCanvas aboutCanvas = new AboutCanvas(calendarControl, display);
         display.setCurrent(aboutCanvas);
     }
 
@@ -91,8 +93,8 @@ public class MainMIDlet extends MIDlet implements CommandListener {
     }
 
     private void showDateInformation() {
-        DateInfoForm dateInfomationForm = new DateInfoForm(Resource.PROJECT_NAME, mainForm, display);
-        dateInfomationForm.setDay(lunarCalControl.getCurrentDay());
+        DateInfoForm dateInfomationForm = new DateInfoForm(Resource.PROJECT_NAME, calendarControl, display);
+        dateInfomationForm.setDay(calendarControl.getCurrentDay());
         dateInfomationForm.setMonth(currentMonth);
         dateInfomationForm.setYear(currentYear);
         dateInfomationForm.getInformation();
@@ -105,7 +107,7 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         currentYear = ymd[0];
         currentMonth = ymd[1];
         gotoMonth(currentYear, currentMonth);
-        lunarCalControl.setCurrentDay(ymd[2]);
+        calendarControl.setCurrentDay(ymd[2]);
     }
 
     private void showNextMonth() {
@@ -122,7 +124,7 @@ public class MainMIDlet extends MIDlet implements CommandListener {
             day = ymd[2];
         }
         gotoMonth(currentYear, currentMonth);
-        lunarCalControl.setCurrentDay(day);
+        calendarControl.setCurrentDay(day);
     }
 
     private void showPrevMonth() {
@@ -139,53 +141,41 @@ public class MainMIDlet extends MIDlet implements CommandListener {
             day = ymd[2];
         }
         gotoMonth(currentYear, currentMonth);
-        lunarCalControl.setCurrentDay(day);
+        calendarControl.setCurrentDay(day);
     }
 
     protected void initialize() {
-        /*
-        String headerString = "Tháng " + currentMonth + " năm " + currentYear;
-        header = new StringItem(headerString, Resource.EMPTY);
-        //header.setPreferredSize(240, 20);
-        header.setFont(Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN,
-        Font.SIZE_LARGE));
-
-        header.setLayout(Item.LAYOUT_CENTER);
-         */
-
-        //showSplashScreen();
-
         display = Display.getDisplay(this);
-        lunarCalControl = new LunarCalendarControl(Resource.EMPTY, Display.getDisplay(this));
-        lunarCalControl.gotoMonth(currentYear, currentMonth);
-        lunarCalControl.setCurrentDay(lunarCalControl.getCurrentDay());
-        lunarCalControl.setPreferredSize(ScreenDetection.getCanvasWidth(), ScreenDetection.getCanvasHeight());
-        //lunarCalControl.setLayout(Item.LAYOUT_CENTER);
-
-        /*
-        Spacer spacer = new Spacer(ScreenDetection.getCanvasWidth(), 1);
-        spacer.setLayout(Item.LAYOUT_CENTER);
-        mainForm.append(spacer);
-         */
-
-        //mainForm.append(header);
-
-        /*
-        spacer = new Spacer(ScreenDetection.getCanvasWidth(), 5);
-        spacer.setLayout(Item.LAYOUT_CENTER);
-        mainForm.append(spacer);
-         */
-
-        mainForm.append(lunarCalControl);
-
-        mainForm.addCommand(CMD_EXIT);
-        mainForm.addCommand(CMD_SHOW_DATE_INFO);
-        mainForm.addCommand(CMD_CHOOSE_DATE);
-        mainForm.addCommand(CMD_GOTO_CURRENT_MONTH);
-        mainForm.addCommand(CMD_GOTO_NEXT_MONTH);
-        mainForm.addCommand(CMD_GOTO_PREV_MONTH);
-        mainForm.addCommand(CMD_ABOUT);
-        mainForm.setCommandListener(this);
+        
+//        lunarCalControl = new LunarCalendarControl(Resource.EMPTY, Display.getDisplay(this));
+//        lunarCalControl.gotoMonth(currentYear, currentMonth);
+//        lunarCalControl.setCurrentDay(lunarCalControl.getCurrentDay());
+//        lunarCalControl.setPreferredSize(ScreenDetection.getFormWidth(), ScreenDetection.getFormHeight());
+//        //lunarCalControl.setLayout(Item.LAYOUT_EXPAND | Item.LAYOUT_VEXPAND);
+//
+//        mainForm.append(lunarCalControl);
+//        
+//        mainForm.addCommand(CMD_EXIT);
+//        mainForm.addCommand(CMD_SHOW_DATE_INFO);
+//        mainForm.addCommand(CMD_CHOOSE_DATE);
+//        mainForm.addCommand(CMD_GOTO_CURRENT_MONTH);
+//        mainForm.addCommand(CMD_GOTO_NEXT_MONTH);
+//        mainForm.addCommand(CMD_GOTO_PREV_MONTH);
+//        mainForm.addCommand(CMD_ABOUT);
+//        mainForm.setCommandListener(this);
+        
+        calendarControl = new CalendarCanvas();
+        calendarControl.gotoMonth(currentYear, currentMonth);
+        calendarControl.setCurrentDay(calendarControl.getCurrentDay());     
+        
+        calendarControl.addCommand(CMD_EXIT);
+        calendarControl.addCommand(CMD_SHOW_DATE_INFO);
+        calendarControl.addCommand(CMD_CHOOSE_DATE);
+        calendarControl.addCommand(CMD_GOTO_CURRENT_MONTH);
+        calendarControl.addCommand(CMD_GOTO_NEXT_MONTH);
+        calendarControl.addCommand(CMD_GOTO_PREV_MONTH);
+        calendarControl.addCommand(CMD_ABOUT);
+        calendarControl.setCommandListener(this);
     }
 
     protected void startApp() {
@@ -195,8 +185,8 @@ public class MainMIDlet extends MIDlet implements CommandListener {
             firstTime = false;
         }
 
-        display.setCurrent(mainForm);
-        //showSplashScreen();
+        display.setCurrent(calendarControl);
+    //showSplashScreen();
     }
 
     public void commandAction(Command command, Displayable displayable) {
@@ -204,10 +194,10 @@ public class MainMIDlet extends MIDlet implements CommandListener {
             destroyApp(false);
             notifyDestroyed();
         } else if (command == CMD_CHOOSE_DATE) {
-            lunarCalControl.setLocation(LunarCalendarControl.UPPER);
+            //lunarCalControl.setLocation(LunarCalendarControl.UPPER);
             showChooseDateForm();
         } else if (command == CMD_SHOW_DATE_INFO) {
-            lunarCalControl.setLocation(LunarCalendarControl.UPPER);
+            //lunarCalControl.setLocation(LunarCalendarControl.UPPER);
             showDateInformation();
         } else if (command == CMD_GOTO_CURRENT_MONTH) {
             showCurrentMonth();
@@ -216,14 +206,19 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         } else if (command == CMD_GOTO_PREV_MONTH) {
             showPrevMonth();
         } else if (command == CMD_ABOUT) {
-            lunarCalControl.setLocation(LunarCalendarControl.UPPER);
+            //lunarCalControl.setLocation(LunarCalendarControl.UPPER);
             showAboutForm();
         }
     }
 
     protected void destroyApp(boolean unconditional) {
+        notifyDestroyed();
     }
 
     protected void pauseApp() {
     }
+
+	public Displayable getCalendarControl() {
+		return calendarControl;
+	}
 }
