@@ -1,6 +1,5 @@
 package com.anchorman.lunarcalendar.ui;
 
-import com.anchorman.lunarcalendar.platform.ScreenDetection;
 import javax.microedition.lcdui.*;
 import javax.microedition.midlet.MIDlet;
 
@@ -29,12 +28,7 @@ public class MainMIDlet extends MIDlet implements CommandListener {
     private ChooseDateForm chooseDateForm = null;
     //private LunarCalendarControl lunarCalControl;
     private CalendarCanvas calendarControl;
-    private StringItem header;
-
-//    public Form getMainForm() {
-//        return mainForm;
-//    }
-
+    
     public Display getDisplay() {
         return display;
     }
@@ -50,10 +44,10 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         //mainForm = new Form(Resource.PROJECT_NAME);
     }
 
-    public void showSplashScreen() {
-        //new SplashCanvas(display, mainForm);
-    	new SplashCanvas(display, calendarControl);
-    }
+//    public void showSplashScreen() {
+//        //new SplashCanvas(display, mainForm);
+//    	new SplashCanvas(display, calendarControl);
+//    }
 
     public void gotoMonth(int year, int month) {
         this.currentYear = year;
@@ -93,7 +87,7 @@ public class MainMIDlet extends MIDlet implements CommandListener {
     }
 
     private void showDateInformation() {
-        DateInfoForm dateInfomationForm = new DateInfoForm(Resource.PROJECT_NAME, calendarControl, display);
+        DateInfoForm dateInfomationForm = new DateInfoForm(Resource.APPLICATION_NAME, calendarControl, display);
         dateInfomationForm.setDay(calendarControl.getCurrentDay());
         dateInfomationForm.setMonth(currentMonth);
         dateInfomationForm.setYear(currentYear);
