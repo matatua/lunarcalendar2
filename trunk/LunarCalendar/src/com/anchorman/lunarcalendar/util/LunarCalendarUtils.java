@@ -342,7 +342,7 @@ public class LunarCalendarUtils {
         Vector events = findYearlyEvents(dd, mm);
         String ret = "";
         for (int i = 0; i < events.size(); i++) {
-            ret += ((YearlyEvent) events.elementAt(i)).getInfo() + " ";
+            ret += ((YearlyEvent) events.elementAt(i)).getInfo() + "\r\n";
         }
         return ret;
     }
@@ -351,7 +351,7 @@ public class LunarCalendarUtils {
         Vector events = findSpecialYearlyEvents(dd, mm);
         String ret = "";
         for (int i = 0; i < events.size(); i++) {
-            ret += ((YearlyEvent) events.elementAt(i)).getInfo() + " ";
+            ret += ((YearlyEvent) events.elementAt(i)).getInfo() + "\r\n";
         }
         return ret;
     }
