@@ -55,7 +55,7 @@ public class AboutCanvas extends Canvas implements CommandListener {
     protected void paint(Graphics g) {
     	int x = ScreenDetection.getCanvasWidth() / 2;
     	int y = ScreenDetection.getCanvasHeight() / 2;
-         // Load background image
+        // Load background image
         if (backgroundImage == null) {
             try {
                 backgroundImage = Image.createImage(Resource.ABOUT_IMAGE_PATH);
@@ -68,6 +68,7 @@ public class AboutCanvas extends Canvas implements CommandListener {
             	}
             }
         }
+
         // Draw background
         if (backgroundImage != null){
             x = (ScreenDetection.getCanvasWidth() - backgroundImage.getWidth()) / 2;
@@ -90,6 +91,7 @@ public class AboutCanvas extends Canvas implements CommandListener {
             } catch (Exception e) {
             }
         }
+
         // Draw icon
         if (iconImage != null){
             x = (ScreenDetection.getCanvasWidth() - iconImage.getWidth()) / 2;
@@ -100,7 +102,7 @@ public class AboutCanvas extends Canvas implements CommandListener {
         // Draw application name
         GraphicUtils.setColor(g, stringColor);
         x =  ScreenDetection.getCanvasWidth() / 2;
-        y += iconImage != null ? iconImage.getHeight() * 4/3 : - y / 2;
+        y += iconImage != null ? iconImage.getHeight() * 5 / 3 : - y / 2;
         g.setFont(Resource.FONT_LARGE_PLAIN_BOLD);
         g.drawString(Resource.APPLICATION_NAME, x, y, Graphics.BASELINE | Graphics.HCENTER);
         
@@ -115,6 +117,7 @@ public class AboutCanvas extends Canvas implements CommandListener {
         g.drawString(Resource.COPY_RIGHT, x, y, Graphics.BASELINE | Graphics.HCENTER);
         
         // Draw over email
+        g.setFont(Resource.FONT_SMALL_PLAIN);
         y += g.getFont().getHeight();
         g.drawString(Resource.OWNER_EMAIL, x, y, Graphics.BASELINE | Graphics.HCENTER);
         

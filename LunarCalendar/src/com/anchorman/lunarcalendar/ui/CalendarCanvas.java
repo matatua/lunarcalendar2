@@ -179,13 +179,12 @@ public class CalendarCanvas extends Canvas {
 
         GraphicUtils.setColor(g, lineColor);
         g.setStrokeStyle(Graphics.DOTTED);
-        // for (int i = 0; i <= rows; i++) {
-        for (int i = 1; i < rows; i++) {
-            // g.drawLine(0, i * cellHeight + PADDING_TOP, cols * cellWidth, i *
-            // cellHeight + PADDING_TOP);
-        }
-
-        // for (int i = 0; i <= cols; i++) {
+        
+//        for (int i = 1; i < rows; i++) {
+//            g.drawLine(0, i * cellHeight + PADDING_TOP, cols * cellWidth, i *
+//            cellHeight + PADDING_TOP);
+//        }
+        
         for (int i = 1; i < cols; i++) {
             g.drawLine(i * cellWidth, 0 + PADDING_TOP + SUB_HEIGHT, i * cellWidth, rows * cellHeight + PADDING_TOP);
         }
@@ -321,7 +320,7 @@ public class CalendarCanvas extends Canvas {
         //String keyValue = getKeyName(keyCode);
 
         //if ("DOWN".equals(keyValue)) {
-        if (keyCode == -2) {
+        if (keyCode == -2 || keyCode == Canvas.KEY_NUM8) {
             if (currentY < (rows - 1)) {
                 // Check focusable for cell
                 if (Resource.EMPTY.equals(solarCalendarData[currentY + 1][currentX])) {
@@ -333,7 +332,7 @@ public class CalendarCanvas extends Canvas {
             }
         }
         //if ("UP".equals(keyValue)) {
-        if (keyCode == -1) {
+        if (keyCode == -1  || keyCode == Canvas.KEY_NUM2) {
 
             if (currentY > 1) {
                 // Check focusable for cell
@@ -346,7 +345,7 @@ public class CalendarCanvas extends Canvas {
 
         }
         //if ("LEFT".equals(keyValue)) {
-        if (keyCode == -3) {
+        if (keyCode == -3 || keyCode == Canvas.KEY_NUM4) {
             if (currentX > 0) {
                 // Check focusable for cell
                 if (Resource.EMPTY.equals(solarCalendarData[currentY][currentX - 1])) {
@@ -358,7 +357,7 @@ public class CalendarCanvas extends Canvas {
             }
         }
         //if ("RIGHT".equals(keyValue)) {
-        if (keyCode == -4) {
+        if (keyCode == -4 || keyCode == Canvas.KEY_NUM6) {
             if (currentX < (cols - 1)) {
                 // Check focusable for cell
                 if (Resource.EMPTY.equals(solarCalendarData[currentY][currentX + 1])) {
