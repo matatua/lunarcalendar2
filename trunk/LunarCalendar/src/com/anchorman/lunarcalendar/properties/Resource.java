@@ -33,7 +33,7 @@ public class Resource {
 
     public static final String APPLICATION_NAME = "Lunar Calendar";
     public static final String APPLICATION_VERSION = "Phiên bản: 1.0.0";
-    public static final String COPY_RIGHT = "© AnchorMan - 01/2009";
+    public static final String COPY_RIGHT = "© AnchorMan - 02/2009";
     public static final String OWNER_EMAIL = "Email: Anchor.Man@zing.vn";
     
     public static final String ZODIAC_TIME_TEXT = "Giờ hoàng đạo: ";
