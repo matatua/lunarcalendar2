@@ -35,24 +35,22 @@ public class Resource {
     public static final String APPLICATION_VERSION = "Phiên bản: 1.0.0";
     public static final String COPY_RIGHT = "© AnchorMan - 02/2009";
     public static final String OWNER_EMAIL = "Email: Anchor.Man@zing.vn";
-    
-    public static final String ZODIAC_TIME_TEXT = "Giờ hoàng đạo: ";
-	
-    public static String SOLAR_CALENDAR_TEXT = "Dương lịch: ";
-    public static String LUNAR_CALENDAR_TEXT = "Âm lịch: ";
-    public static String NEW_LINE = "\r\n";
 
-    //public static int FONT_FACE_SYSTEM = Font.FACE_SYSTEM;
-    //public static int FONT_FACE_PROPORTIONAL = Font.FACE_PROPORTIONAL;
-    //public static int FONT_FACE_MONOSPACE = Font.FACE_MONOSPACE;
+    public static final String ZODIAC_TIME_TEXT = "Giờ hoàng đạo: ";
+
+    public static final String SOLAR_CALENDAR_TEXT = "Dương lịch: ";
+    public static final String LUNAR_CALENDAR_TEXT = "Âm lịch: ";
+    public static final String NEW_LINE = "\r\n";
 
     public static final Font FONT_SMALL_PLAIN = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_SMALL);
     public static final Font FONT_MEDIUM_PLAIN = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
     public static final Font FONT_MEDIUM_BOLD = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_MEDIUM);
     public static final Font FONT_LARGE_PLAIN = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_LARGE);
-    //public static final Font FONT_SMALL_BOLD = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_SMALL);
-	public static final Font FONT_LARGE_PLAIN_BOLD = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_LARGE);
-    
-    public static String YEARLY_EVENT_TEXT = "Sự kiện âm lịch: ";
-    public static String SPECIAL_YEARLY_EVENT_TEXT = "Sự kiện dương lịch: ";
+    public static final Font FONT_SMALL_BOLD = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_SMALL);
+	public static final Font FONT_LARGE_BOLD = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_LARGE);
+
+    public static final String YEARLY_EVENT_TEXT = "Sự kiện âm lịch: ";
+    public static final String SPECIAL_YEARLY_EVENT_TEXT = "Sự kiện dương lịch: ";
+    public static final String EVENT_SYMBOL = "*";
+
 }

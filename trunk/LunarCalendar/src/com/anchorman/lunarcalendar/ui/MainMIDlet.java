@@ -169,6 +169,7 @@ public class MainMIDlet extends MIDlet implements CommandListener {
         calendarControl.addCommand(CMD_GOTO_NEXT_MONTH);
         calendarControl.addCommand(CMD_GOTO_PREV_MONTH);
         calendarControl.addCommand(CMD_ABOUT);
+        
         calendarControl.setCommandListener(this);
     }
 
